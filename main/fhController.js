@@ -109,7 +109,11 @@ export async function placeFhBet(req, res) {
     // Simple custom stake: 2% max, scaled by EV
     let stake = bankroll * 0.02 * (ev_percent / 10);
     const maxStake = bankroll * 0.02;
+    // Cap at maxStake
     if (stake > maxStake) stake = maxStake;
+    // Enforce minimum stake of 10 when possible. If maxStake is less than 10,
+    // fall back to maxStake (can't stake more than allowed by bankroll).
+    if (stake < 10) stake = (maxStake >= 10 ? 10 : maxStake);
     stake = Number(stake.toFixed(2));
 
     const bet = {
