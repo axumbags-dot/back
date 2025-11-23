@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { testDBConnection } from "./config/db.js";
 import morgan from "morgan";
+import cron from "node-cron";
 import Fhr from "./main/fhroute.js";
 
 dotenv.config();
@@ -33,5 +34,17 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", Fhr);
+
+// Schedule a cron job to send/log "hi" every 15 minutes
+cron.schedule('*/10 * * * *', async () => {
+  console.log('Pinging Google...');
+
+  try {
+    const res = await fetch('https://back.yabets.dev');
+    console.log('Status:', res.status);
+  } catch (err) {
+    console.error('Error pinging Google:', err.message);
+  }
+});
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
