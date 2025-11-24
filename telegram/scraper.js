@@ -1,4 +1,4 @@
-const MATCH_LIST_URL = "https://api.betika.co.tz/v1/uo/matches?sport_id=5&page=1&limit=50&keyword=&tab=%20&sub_type_id=1,186&tag_id=&country_id=3&language=en";
+const MATCH_LIST_URL = "https://api.betika.co.tz/v1/uo/matches?sport_id=5&page=1&limit=100&keyword=&tab=upcoming&sub_type_id=1,186&tag_id=&country_id=3&language=en";
 const MATCH_ODDS_URL = "https://api.betika.co.tz/v1/uo/match?id={MATCH_ID}&language=en";
 const HEADERS = { "User-Agent": "Mozilla/5.0", "Accept": "application/json" };
 
@@ -10,7 +10,11 @@ export async function getAllMatches() {
     const res = await fetch(MATCH_LIST_URL, { headers: HEADERS });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
+
     const matches = data.data || [];
+console.log(matches.length);
+    
+    
 
     return matches.map(m => ({
       matchId: m.match_id,
